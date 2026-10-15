@@ -22,6 +22,10 @@ Day-by-day weather along a trip, anywhere in the world.
 
 Chart: one column per day (arrival, days spent there, then up to day 15), highs and lows, rain and snow, weather icon, ◆ temperature at arrival time, air quality badge (European index). Dates and times: local time at each stop.
 
+## Enregistrer un voyage · Save a trip
+
+**💾 Enregistrer / Save** télécharge `voyage_….json` ; **📂 Ouvrir / Open** le recharge. Dates stockées en jours depuis le départ · dates stored as days from departure: choisir la date de départ puis **Recaler les dates** · pick the departure date then **Shift the dates**. Les fichiers de Météo trajet s'ouvrent aussi · Météo trajet files open too.
+
 ## Installer sur le téléphone · Install on your phone
 
 FR : ouvrir la page dans Chrome (Android) ou Safari (iPhone), puis menu ⋮ → « Ajouter à l'écran d'accueil » (Safari : bouton Partager → « Sur l'écran d'accueil »). L'appli s'ouvre en plein écran ; hors connexion, la dernière version de la page reste disponible (les prévisions, elles, demandent une connexion).
