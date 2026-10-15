@@ -177,10 +177,11 @@ document.getElementById("lock").addEventListener("submit",e=>{
       <button class="go" id="go" disabled data-t="go">Afficher</button>
       <button class="sec" id="sauver" data-t="sauver">💾 Enregistrer</button>
       <button class="sec" id="ouvrir" data-t="ouvrir">📂 Ouvrir</button>
+      <button class="sec" id="retour" data-t="retour">⇄ Retour</button>
       <button class="sec" id="effacer" data-t="effacer">🗑 Effacer</button>
       <input type="file" id="fichier" accept=".json,application/json" hidden>
     </div>
-    <div id="recal" class="recal hide"><span data-t="recalA">Voyage ouvert :</span> <b id="recalNom"></b> · <span data-t="recalB">départ le</span>
+    <div id="recal" class="recal hide"><span id="recalA">Voyage ouvert :</span> <b id="recalNom"></b> · <span data-t="recalB">départ le</span>
       <input type="date" id="recalDate"> <button class="sec" id="recalOk" data-t="recalOk">Recaler les dates</button></div>
     <p id="msg" class="note" style="margin:10px 0 0"></p>
   </div>
@@ -223,6 +224,7 @@ document.getElementById("lock").addEventListener("submit",e=>{
           <li><b>📄 PDF / Imprimer</b> : page A4 paysage avec le voyage et la date d'édition.</li>
           <li>L'adresse de la page garde tout le voyage, la langue et les unités : il suffit de la partager ou de la mettre en favori.</li>
           <li><b>💾 Enregistrer / 📂 Ouvrir</b> : le voyage est gardé dans un fichier .json, avec les écarts en jours entre étapes ; à l'ouverture, choisissez la date de départ et les dates se recalent. Les trajets de Météo trajet s'ouvrent aussi. <b>🗑 Effacer</b> vide toutes les étapes (deuxième clic pour confirmer).</li>
+          <li><b>⇄ Retour</b> : le même voyage en sens inverse, avec les écarts entre étapes inversés ; départ à la date de la dernière étape, à recaler si besoin.</li>
           <li>Aucune donnée n'est conservée : tout est calculé dans le navigateur. Sources : Open-Meteo, Copernicus CAMS, GeoNames.</li>
         </ul>
       </div>
@@ -248,6 +250,7 @@ document.getElementById("lock").addEventListener("submit",e=>{
           <li><b>📄 PDF / Print</b>: A4 landscape page with the trip and the date.</li>
           <li>The page address keeps the whole trip, language and units: just share it or bookmark it.</li>
           <li><b>💾 Save / 📂 Open</b>: the trip is kept in a .json file, with the gaps in days between stops; when opening it, pick the departure date and the dates shift. Météo trajet files open too. <b>🗑 Clear</b> empties all stops (click twice to confirm).</li>
+          <li><b>⇄ Return trip</b>: the same trip reversed, with the gaps between stops reversed; departure on the last stop's date, to shift if needed.</li>
           <li>No data is stored: everything is computed in your browser. Sources: Open-Meteo, Copernicus CAMS, GeoNames.</li>
         </ul>
       </div>
@@ -263,7 +266,7 @@ const MAXE=10, NJ=16;
 
 /* ---------- Langue et unités ---------- */
 const TXT={
-fr:{titre:"Météo voyage",effacer:"🗑 Effacer",effConf:"Confirmer l'effacement ?",sauver:"💾 Enregistrer",ouvrir:"📂 Ouvrir",recalA:"Voyage ouvert :",recalB:"départ le",recalOk:"Recaler les dates",
+fr:{titre:"Météo voyage",retour:"⇄ Retour",retourA:"Retour :",peuRetour:"Il faut au moins deux étapes avec leur date pour préparer le retour.",effacer:"🗑 Effacer",effConf:"Confirmer l'effacement ?",sauver:"💾 Enregistrer",ouvrir:"📂 Ouvrir",recalA:"Voyage ouvert :",recalB:"départ le",recalOk:"Recaler les dates",
   vide:"Choisissez au moins une ville avant d'enregistrer.",illisible:"Fichier non reconnu : choisissez un voyage enregistré par Météo voyage ou Météo trajet (.json).",sous:"Le temps prévu jour par jour le long de votre voyage, partout dans le monde : à l'arrivée à chaque étape, sur place, puis jusqu'à 16 jours.",
   ajout:"＋ Ajouter une étape",go:"Afficher",pdf:"📄 PDF / Imprimer",lMax:"T° maxi",lMin:"T° mini",lHeure:"À l'heure d'arrivée",lAir:"Qualité de l'air",
   fonct:"ℹ️ Fonctionnement du site",pluie:"Pluie",neige:"Neige",
@@ -278,7 +281,7 @@ fr:{titre:"Météo voyage",effacer:"🗑 Effacer",effConf:"Confirmer l'effacemen
   altAuto:"automatique",altSaisie:"saisie",altitude:"Altitude",detail:"prévisions détaillées (Météo à venir)",
   printHead:"METEO VOYAGE",printDate:(d,h)=>`établie le ${d} à ${h} · fef73.github.io/meteo-travel`,maPos:"Ma position",
   AQ:["Bon","Moyen","Dégradé","Mauvais","Très mauvais","Extrêmement mauvais"]},
-en:{titre:"Travel weather",effacer:"🗑 Clear",effConf:"Confirm clearing?",sauver:"💾 Save",ouvrir:"📂 Open",recalA:"Trip opened:",recalB:"departure on",recalOk:"Shift the dates",
+en:{titre:"Travel weather",retour:"⇄ Return trip",retourA:"Return trip:",peuRetour:"You need at least two stops with their dates to prepare the return trip.",effacer:"🗑 Clear",effConf:"Confirm clearing?",sauver:"💾 Save",ouvrir:"📂 Open",recalA:"Trip opened:",recalB:"departure on",recalOk:"Shift the dates",
   vide:"Pick at least one city before saving.",illisible:"File not recognised: pick a trip saved by Travel weather or Météo trajet (.json).",sous:"Day-by-day weather along your trip, anywhere in the world: on arrival at each stop, while you stay, then up to 16 days.",
   ajout:"＋ Add a stop",go:"Show",pdf:"📄 PDF / Print",lMax:"High",lMin:"Low",lHeure:"At arrival time",lAir:"Air quality",
   fonct:"ℹ️ How the site works",pluie:"Rain",neige:"Snow",
@@ -641,7 +644,7 @@ $("fichier").onchange=async ev=>{
   etapes.forEach(e=>e.el.remove()); etapes.length=0;
   CHARGE=liste.slice(0,MAXE).map(x=>x.jour);
   liste.slice(0,MAXE).forEach(x=>{const e=ajouterEtape(addJ(MIN,x.jour),x.altitude??undefined,x.heure||"");e.choisir(x.ville)});
-  $("recalNom").textContent=d.nom||f.name; $("recalDate").value=MIN; $("recal").classList.remove("hide");
+  $("recalA").textContent=t("recalA"); $("recalNom").textContent=d.nom||f.name; $("recalDate").value=MIN; $("recal").classList.remove("hide");
   if(verifier())$("go").click();
 };
 $("recalOk").onclick=()=>{
@@ -650,6 +653,7 @@ $("recalOk").onclick=()=>{
   if(verifier())$("go").click();
 };
 
+function versChoix(c){return c}
 function versFichier(c){return {id:c.id??null,nom:c.nom,region:c.region,pays:c.pays,cc:c.cc,lat:c.lat,lon:c.lon}}
 // accepte aussi les trajets enregistrés par Météo trajet (communes françaises)
 function depuisFichier(format){return x=>{
@@ -660,6 +664,22 @@ function depuisFichier(format){return x=>{
   else return null;
   return {jour:x.jour,heure:/^\d{2}:\d{2}$/.test(x.heure||"")?x.heure:"",altitude:Number.isFinite(x.altitude)?x.altitude:null,ville}}}
 
+
+
+/* ---------- Retour : même trajet en sens inverse, écarts entre étapes inversés ----------
+   A (J0) → B (J+2) → C (J+3) devient C (J0) → B (J+1) → A (J+3) ; départ par défaut : date de la dernière étape. */
+$("retour").onclick=()=>{
+  const val=etapes.filter(e=>e.c&&e.el.querySelector(".date").value);
+  if(val.length<2){$("msg").textContent=t("peuRetour");return}
+  const pris=val.map(e=>{const a=altEtape(e);return {c:e.c,date:e.el.querySelector(".date").value,alt:Number.isNaN(a)||a==null?undefined:a}});
+  const dFin=pris.at(-1).date, inv=pris.slice().reverse();
+  etapes.forEach(e=>e.el.remove()); etapes.length=0;
+  CHARGE=inv.map(x=>joursEntre(x.date,dFin));
+  inv.forEach((x,i)=>{const e=ajouterEtape(addJ(dFin,CHARGE[i]),x.alt,"");e.choisir(versChoix(x.c))});
+  $("recalA").textContent=t("retourA"); $("recalNom").textContent=inv.map(x=>x.c.nom).join(" → ");
+  $("recalDate").value=dFin; $("recal").classList.remove("hide");
+  if(verifier())$("go").click();
+};
 
 /* ---------- Effacer le trajet (deuxième clic pour confirmer) ---------- */
 let effTimer=null;
