@@ -142,8 +142,8 @@ function sha256(str){
   return H.map(v=>(v>>>0).toString(16).padStart(8,"0")).join("");
 }
 const empreinte=pw=>sha256("fef73:"+pw);
-function unlock(){document.body.classList.remove("locked");try{localStorage.setItem("mt-ok",PASS_HASH)}catch(e){}}
-try{if(localStorage.getItem("mt-ok")===PASS_HASH)unlock()}catch(e){}
+function unlock(){document.body.classList.remove("locked");try{localStorage.setItem("mt-ok",PASS_HASH);localStorage.setItem("fef73-ok",PASS_HASH)}catch(e){}}
+try{if(localStorage.getItem("mt-ok")===PASS_HASH||localStorage.getItem("fef73-ok")===PASS_HASH)unlock()}catch(e){}
 document.getElementById("lock").addEventListener("submit",e=>{
   e.preventDefault();
   const pw=document.getElementById("lock-pw");
