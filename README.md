@@ -22,6 +22,12 @@ Day-by-day weather along a trip, anywhere in the world.
 
 Chart: one column per day (arrival, days spent there, then up to day 15), highs and lows, rain and snow, weather icon, ◆ temperature at arrival time, air quality badge (European index). Dates and times: local time at each stop.
 
+## Installer sur le téléphone · Install on your phone
+
+FR : ouvrir la page dans Chrome (Android) ou Safari (iPhone), puis menu ⋮ → « Ajouter à l'écran d'accueil » (Safari : bouton Partager → « Sur l'écran d'accueil »). L'appli s'ouvre en plein écran ; hors connexion, la dernière version de la page reste disponible (les prévisions, elles, demandent une connexion).
+
+EN: open the page in Chrome (Android) or Safari (iPhone), then menu ⋮ → "Add to Home screen" (Safari: Share button → "Add to Home Screen"). The app opens full screen; offline, the last version of the page stays available (forecasts need a connection).
+
 ## Adresse · Address
 
 `?e=ID_date[_altitude m[_HH:MM]],…&lang=fr|en&t=c|f&u=mm|in` — ID GeoNames (géocodage Open-Meteo). Exemple · example : `?e=2988507_2026-10-16,5128581_2026-10-18__14:30&lang=en&t=f&u=in`.
@@ -29,6 +35,15 @@ Chart: one column per day (arrival, days spent there, then up to day 15), highs 
 ## Données · Data
 
 Open-Meteo (prévisions · forecast, géocodage · geocoding GeoNames), Copernicus CAMS (qualité de l'air · air quality). Aucune donnée conservée · no data stored: tout est calculé dans le navigateur · everything runs in the browser.
+
+## Fichiers · Files
+
+| Fichier · File | Rôle · Role |
+|---|---|
+| `index.html` | Le site complet (HTML, CSS, JavaScript) · the whole site |
+| `manifest.json`, `sw.js` | Appli installable et hors connexion · installable app, offline |
+| `icon-192.png`, `icon-512.png`, `icon-maskable-512.png` | Icônes · icons |
+| `README.md` | Ce fichier · this file |
 
 ## Droits · Rights
 

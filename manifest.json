@@ -1,0 +1,16 @@
+{
+  "name": "Météo voyage · Travel weather",
+  "short_name": "Météo voyage",
+  "description": "Le temps jour par jour le long d'un voyage, partout dans le monde · Day-by-day weather along a trip, anywhere in the world.",
+  "lang": "fr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0b1426",
+  "theme_color": "#0b1426",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
