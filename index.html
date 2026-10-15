@@ -310,10 +310,9 @@ const dP=()=>UL==="in"?2:1;
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const isoJ=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
 const addJ=(s,n)=>{const d=new Date(s+"T12:00");d.setDate(d.getDate()+n);return isoJ(d)};
-const heureAff=h=>new Date(`2000-01-01T${h}`).toLocaleTimeString(LOC(),{hour:"numeric",minute:"2-digit"});
+const heureAff=h=>LANG==="fr"?h.replace(":","h"):new Date(`2000-01-01T${h}`).toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit"});
 const dateAff=s=>new Date(s+"T12:00").toLocaleDateString(LOC(),{day:"numeric",month:"numeric",year:"numeric"});
 const MIN=isoJ(new Date()), MAX=addJ(MIN,NJ-1), TEND=addJ(MIN,7);
-const drapeau=cc=>cc&&cc.length===2?String.fromCodePoint(...[...cc.toUpperCase()].map(c=>0x1F1E6+c.charCodeAt(0)-65)):"";
 
 /* ---------- Qualité de l'air : indice européen (mêmes classes et couleurs que la fiche climat) ---------- */
 const AQC=["#50f0e6","#50ccaa","#f0e641","#ff5050","#960032","#7d2181"];
@@ -380,7 +379,7 @@ function champVille(e){
   let timer, items=[], on=-1;
   const fermer=()=>{box.style.display="none";on=-1};
   e.choisir=c=>{
-    e.c=c; inp.value=c.nom+(c.cc?" "+drapeau(c.cc):"");
+    e.c=c; inp.value=c.nom+(c.pays?" — "+c.pays:"");
     inp.title=libelle(c); inp.classList.add("ok"); inp.classList.remove("ko"); fermer(); verifier();
   };
   inp.addEventListener("input",()=>{
@@ -389,7 +388,7 @@ function champVille(e){
     if(v.length<2)return fermer();
     timer=setTimeout(async()=>{
       items=await chercher(v);
-      box.innerHTML=items.map(c=>`<div>${drapeau(c.cc)} ${esc(c.nom)} <small>${esc(libelle(c))}</small></div>`).join("")
+      box.innerHTML=items.map(c=>`<div>${esc(c.nom)} <small>${esc(libelle(c))}</small></div>`).join("")
         ||`<div><small>${t("aucune")}</small></div>`;
       [...box.children].forEach((d,k)=>d.onmousedown=()=>items[k]&&e.choisir(items[k]));
       box.style.display="block"; on=-1;
@@ -569,8 +568,8 @@ function dessiner(E){
     s+=`<text x="${x(i)}" y="${H-B+20}" fill="var(--txt)" font-size="${fs}" text-anchor="middle">${jour}${d.toLocaleDateString(LOC(),{day:"numeric",month:"numeric"})}</text>
         ${e.cc==="FR"?`<a href="https://fef73.github.io/mairies-pdf/meteo-future.html?lat=${e.lat}&lon=${e.lon}&nom=${encodeURIComponent(e.nom)}${e.altSaisie?"&alt="+e.alt:""}" target="_blank">${nomTxt}</a>`:nomTxt}
         <text x="${x(i)}" y="${H-B+54}" fill="var(--mute)" font-size="11" text-anchor="middle" font-family="IBM Plex Mono,monospace">${Math.round(cA(e.elev))} ${uA()}<title>${t("altitude")} ${e.altSaisie?t("altSaisie"):t("altAuto")} : ${Math.round(cA(e.elev))} ${uA()}</title></text>
-        ${e.arrivee?`<text x="${x(i)}" y="${H-B+70}" fill="var(--mute)" font-size="11" text-anchor="middle">${t("etape")} ${e.etape+1} ${drapeau(e.cc)}</text>`:""}
-        ${e.h&&e.h.t!=null?`<text x="${x(i)}" y="${H-B+86}" fill="var(--txt)" font-size="11" text-anchor="middle" font-family="IBM Plex Mono,monospace">◆ ${heureAff(e.h.heure)}</text>
+        ${e.arrivee?`<text x="${x(i)}" y="${H-B+70}" fill="var(--mute)" font-size="11" text-anchor="middle">${t("etape")} ${e.etape+1}</text>`:""}
+        ${e.h&&e.h.t!=null?`<text x="${x(i)}" y="${H-B+86}" fill="var(--txt)" font-size="${n>12?10:11}" text-anchor="middle" font-family="IBM Plex Mono,monospace">${n>12?"":"◆ "}${heureAff(e.h.heure).replace(" ","")}</text>
           <text x="${x(i)}" y="${H-B+101}" fill="var(--txt)" font-size="12" font-weight="600" text-anchor="middle" font-family="IBM Plex Mono,monospace">${fmt(cT(e.h.t))}°${e.h.p>0||e.h.s>0?" 💧":""}</text>`:""}`;
   });
   $("graphe").innerHTML=s+"</svg>";
