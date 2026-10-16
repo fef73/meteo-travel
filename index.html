@@ -94,6 +94,7 @@ body.locked .lock{display:block}
 #bull h2{font:600 1.15rem/1.3 Fraunces,serif;margin:0 0 2px}
 #bull .bsous{color:var(--mute);font-size:13px;margin:0 0 12px}
 #bull p{margin:0 0 10px}
+#bull .bjours{display:inline-block;margin-top:4px;color:var(--mute);font-size:13px;font-family:"IBM Plex Mono",monospace;line-height:1.7}
 #bull .bfin{color:var(--mute);font-size:13px;font-style:italic}
 #bull .bhaut{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap}
 @page{size:A4 landscape;margin:10mm}
@@ -237,7 +238,7 @@ document.getElementById("lock").addEventListener("submit",e=>{
           <li><b>FR / EN</b> : langue du site · <b>°C / °F</b> : températures · <b>mm / in</b> : pluie, neige et altitude (mm, cm, m ou pouces, pieds).</li>
           <li>Étape en France : clic sur son nom pour ses prévisions détaillées dans Météo à venir.</li>
           <li><b>📄 PDF / Imprimer</b> : page A4 paysage avec le voyage et la date d'édition.</li>
-          <li><b>Bulletin</b> sous le graphique : le temps de chaque étape rédigé en clair, avec la qualité de l'air quand elle est prévue (environ 5 jours), un résumé et ce qu'il faut emporter ; <b>📋 Copier</b> pour le coller dans un message. Il figure aussi dans le PDF.</li>
+          <li><b>Bulletin</b> sous le graphique : le temps de chaque étape rédigé en clair, avec la qualité de l'air quand elle est prévue (environ 5 jours) et, pour les jours de prévision, une ligne jour par jour (icône, maxi/mini, 🟢 🟡 🟠 🔴 air), un résumé et ce qu'il faut emporter ; <b>📋 Copier</b> pour le coller dans un message. Il figure aussi dans le PDF.</li>
           <li>L'adresse de la page garde tout le voyage, la langue et les unités : il suffit de la partager ou de la mettre en favori.</li>
           <li><b>💾 Enregistrer / 📂 Ouvrir</b> : le voyage est gardé dans un fichier .json, avec les écarts en jours entre étapes ; à l'ouverture, choisissez la date de départ et les dates se recalent. Les trajets de Météo trajet s'ouvrent aussi. <b>🗑 Effacer</b> vide toutes les étapes (deuxième clic pour confirmer).</li>
           <li><b>⇄ Retour</b> : le même voyage en sens inverse, avec les écarts entre étapes inversés ; départ à la date de la dernière étape, à recaler si besoin.</li>
@@ -265,7 +266,7 @@ document.getElementById("lock").addEventListener("submit",e=>{
           <li><b>FR / EN</b>: site language · <b>°C / °F</b>: temperatures · <b>mm / in</b>: rain, snow and altitude (mm, cm, m or inches, feet).</li>
           <li>Stop in France: click its name for the detailed forecast in Météo à venir (in French).</li>
           <li><b>📄 PDF / Print</b>: A4 landscape page with the trip and the date.</li>
-          <li><b>Report</b> below the chart: each stop's weather in plain words, with air quality when forecast (about 5 days), a summary and what to pack; <b>📋 Copy</b> to paste it into a message. It is also in the PDF.</li>
+          <li><b>Report</b> below the chart: each stop's weather in plain words, with air quality when forecast (about 5 days) and, for forecast days, a day-by-day line (icon, high/low, 🟢 🟡 🟠 🔴 air), a summary and what to pack; <b>📋 Copy</b> to paste it into a message. It is also in the PDF.</li>
           <li>The page address keeps the whole trip, language and units: just share it or bookmark it.</li>
           <li><b>💾 Save / 📂 Open</b>: the trip is kept in a .json file, with the gaps in days between stops; when opening it, pick the departure date and the dates shift. Météo trajet files open too. <b>🗑 Clear</b> empties all stops (click twice to confirm).</li>
           <li><b>⇄ Return trip</b>: the same trip reversed, with the gaps between stops reversed; departure on the last stop's date, to shift if needed.</li>
@@ -768,12 +769,17 @@ function bulletin(E){
     }
     if(P.some(e=>e.date>=TEND))ph.push(t("bTend"));
     const d0=J[0].date, d1=J.at(-1).date;
-    et.push({nom:J[0].nom,per:d0===d1?dCourt(d0):`${dCourt(d0)} – ${dCourt(d1)}`,ph,tx,tn,gel,pluie,neigeV,aqMax});
+    et.push({nom:J[0].nom,per:d0===d1?dCourt(d0):`${dCourt(d0)} – ${dCourt(d1)}`,ph,tx,tn,gel,pluie,neigeV,aqMax,
+      // jour par jour (prévisions seulement) : icône, jour, maxi/mini, pastille air
+      jj:P.map(e=>{const [ic,lb]=wmo(e.code), ac=e.aq!=null?aqCls(e.aq):null;
+        return {lb:lb+(ac==null?"":` · ${t("lAir")} : ${t("AQ")[ac]} (${Math.round(e.aq)})`),
+          txt:`${ic} ${new Date(e.date+"T12:00").toLocaleDateString(LOC(),{weekday:"short",day:"numeric"})} ${deg(e.tx)}/${deg(e.tn)}${ac==null?"":" "+["🟢","🟢","🟡","🟠","🔴","🟣"][ac]}`}})});
   }
   const C=E.some(e=>e.clim), Pr=E.some(e=>!e.clim);
   $("bTitre").textContent=`${t("bTitre")} · ${[...new Set(et.map(e=>e.nom))].join(" → ")}`;
   $("bSous").textContent=t("bSous")(dCourt(E[0].date),dCourt(E.at(-1).date),C&&Pr?"m":C?"c":"p");
-  let h=et.map(e=>`<p><b>${esc(e.nom)} (${e.per})</b> : ${esc(e.ph.join(" "))}</p>`).join("");
+  let h=et.map(e=>`<p><b>${esc(e.nom)} (${e.per})</b> : ${esc(e.ph.join(" "))}`+
+    (e.jj.length?`<br><span class="bjours">${e.jj.map(j=>`<span title="${esc(j.lb)}">${esc(j.txt)}</span>`).join(" · ")}</span>`:"")+`</p>`).join("");
   // résumé et bagages
   const res=[];
   if(et.length>1){
@@ -801,7 +807,7 @@ function bulletin(E){
   $("bCorps").innerHTML=h.replace(/\.\.(?=<|\s|$)/g,"."); $("bull").classList.remove("hide");
 }
 $("bCopier").onclick=async()=>{
-  const txt=[$("bTitre").textContent,$("bSous").textContent,"",...[...$("bCorps").querySelectorAll("p")].map(p=>p.textContent)].join("\n");
+  const txt=[$("bTitre").textContent,$("bSous").textContent,"",...[...$("bCorps").querySelectorAll("p")].map(p=>p.innerText??p.textContent)].join("\n");
   try{await navigator.clipboard.writeText(txt)}catch{
     const a=document.createElement("textarea");a.value=txt;document.body.appendChild(a);a.select();try{document.execCommand("copy")}catch{}a.remove()}
   const b=$("bCopier"); b.textContent=t("copie"); setTimeout(()=>b.textContent=t("copier"),1500);
