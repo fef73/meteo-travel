@@ -8,7 +8,8 @@ Le temps prévu jour par jour le long d'un voyage, partout dans le monde. Versio
 
 1. Saisir les étapes (jusqu'à 10) : ville choisie dans la liste, date d'arrivée, et en option l'heure d'arrivée et l'altitude.
 2. Cliquer sur **Afficher**. Boutons **FR/EN**, **°C/°F** et **mm/in** (pluie, neige, altitude).
-3. Facultatif : **PDF / Imprimer** (A4 paysage), ou partager l'adresse de la page.
+3. Sous le graphique, un **bulletin** rédigé (par étape, résumé, quoi emporter), à copier avec **📋 Copier**.
+4. Facultatif : **PDF / Imprimer** (A4 paysage, bulletin inclus), ou partager l'adresse de la page.
 
 Graphique : une colonne par jour (arrivée, jours sur place, puis suite jusqu'à J+15), maxi et mini, pluie et neige, icône du temps, ◆ température à l'heure d'arrivée, pastille de qualité de l'air (indice européen). Dates et heures : heure locale de chaque étape.
 
@@ -20,7 +21,8 @@ Day-by-day weather along a trip, anywhere in the world.
 
 1. Enter the stops (up to 10): city picked from the list, arrival date, and optionally arrival time and altitude.
 2. Click **Show**. **FR/EN**, **°C/°F** and **mm/in** (rain, snow, altitude) toggles.
-3. Optional: **PDF / Print** (A4 landscape), or share the page address.
+3. Below the chart, a written **report** (per stop, summary, what to pack), to copy with **📋 Copy**.
+4. Optional: **PDF / Print** (A4 landscape, report included), or share the page address.
 
 Chart: one column per day (arrival, days spent there, then up to day 15), highs and lows, rain and snow, weather icon, ◆ temperature at arrival time, air quality badge (European index). Dates and times: local time at each stop.
 
