@@ -218,7 +218,7 @@ document.getElementById("lock").addEventListener("submit",e=>{
           <li>Points <b>orange</b> : maxi · points <b>bleus</b> : mini · barres : pluie et neige, échelle à droite.</li>
           <li>Icône du temps et <b>pastille de qualité de l'air</b> (indice européen, maximum du jour, environ 5 jours de prévision).</li>
           <li>Au-delà de 7 jours (fond grisé) : simple tendance, à reconfirmer.</li>
-          <li>Au-delà de 16 jours (fond <b>hachuré</b>, points creux) : <b>climat habituel</b>, moyenne des 10 dernières années autour de la date (± 3 jours). En haut : ☔ part des jours de pluie ou neige, ❄ part des nuits avec gel. À l'approche du départ, cliquez de nouveau sur Afficher : les vraies prévisions remplacent le climat.</li>
+          <li>Au-delà de 16 jours (fond <b>hachuré</b>, points creux) : <b>climat habituel</b>, moyenne des 10 dernières années autour de la date (± 3 jours). En haut : ☔ nombre habituel de jours de pluie ou neige par mois, ❄ part des nuits avec gel. À l'approche du départ, cliquez de nouveau sur Afficher : les vraies prévisions remplacent le climat.</li>
         </ul>
         <h3>✨ Et aussi</h3>
         <ul>
@@ -245,7 +245,7 @@ document.getElementById("lock").addEventListener("submit",e=>{
           <li><b>Orange</b> dots: high · <b>blue</b> dots: low · bars: rain and snow, scale on the right.</li>
           <li>Weather icon and <b>air quality badge</b> (European index, daily maximum, about 5 days of forecast).</li>
           <li>Beyond 7 days (grey background): trend only, to be confirmed.</li>
-          <li>Beyond 16 days (<b>hatched</b> background, hollow dots): <b>usual climate</b>, average of the last 10 years around the date (± 3 days). At the top: ☔ share of days with rain or snow, ❄ share of frosty nights. As departure gets closer, click Show again: the real forecast replaces the climate.</li>
+          <li>Beyond 16 days (<b>hatched</b> background, hollow dots): <b>usual climate</b>, average of the last 10 years around the date (± 3 days). At the top: ☔ usual number of days with rain or snow per month, ❄ share of frosty nights. As departure gets closer, click Show again: the real forecast replaces the climate.</li>
         </ul>
         <h3>✨ Also</h3>
         <ul>
@@ -274,7 +274,7 @@ fr:{titre:"Météo voyage",retour:"⇄ Retour",retourA:"Retour :",peuRetour:"Il 
   vide:"Choisissez au moins une ville avant d'enregistrer.",illisible:"Fichier non reconnu : choisissez un voyage enregistré par Météo voyage ou Météo trajet (.json).",sous:"Le temps prévu jour par jour le long de votre voyage, partout dans le monde : à l'arrivée à chaque étape, sur place, puis jusqu'à 16 jours. Voyage plus lointain : le temps habituel à ces dates, calculé sur les 10 dernières années.",
   ajout:"＋ Ajouter une étape",go:"Afficher",pdf:"📄 PDF / Imprimer",lMax:"T° maxi",lMin:"T° mini",lHeure:"À l'heure d'arrivée",lAir:"Qualité de l'air",
   fonct:"ℹ️ Fonctionnement du site",pluie:"Pluie",neige:"Neige",
-  src:"Au-delà de 7 jours : simple tendance (cadre grisé). Au-delà de 16 jours : climat habituel (cadre hachuré, points creux), moyenne des 10 dernières années à ± 3 jours, archives Open-Meteo (ERA5) ; ☔ part des jours avec au moins 1 mm, ❄ part des nuits avec gel. Dates et heures : heure locale de chaque étape. Qualité de l'air : indice européen, prévision CAMS (environ 5 jours ; cadre pointillé au-delà). Sources : Open-Meteo, Copernicus CAMS, GeoNames.",
+  src:"Au-delà de 7 jours : simple tendance (cadre grisé). Au-delà de 16 jours : climat habituel (cadre hachuré, points creux), moyenne des 10 dernières années à ± 3 jours, archives Open-Meteo (ERA5) ; ☔ nombre habituel de jours de pluie ou neige (au moins 1 mm) par mois, ❄ part des nuits avec gel. Dates et heures : heure locale de chaque étape. Qualité de l'air : indice européen, prévision CAMS (environ 5 jours ; cadre pointillé au-delà). Sources : Open-Meteo, Copernicus CAMS, GeoNames.",
   ville:"Ville (tapez au moins 2 lettres)…",heure:"Heure d'arrivée (facultatif), heure locale de l'étape",altT:"Altitude du point — laisser vide pour l'altitude automatique",
   suppr:"Supprimer l'étape",aucune:"Aucune ville trouvée",reseau:"Recherche de ville impossible (réseau).",
   eVille:i=>`Étape ${i} : choisissez une ville dans la liste.`,eDate:i=>`Étape ${i} : indiquez la date d'arrivée.`,
@@ -285,13 +285,13 @@ fr:{titre:"Météo voyage",retour:"⇄ Retour",retourA:"Retour :",peuRetour:"Il 
   altAuto:"automatique",altSaisie:"saisie",altitude:"Altitude",detail:"prévisions détaillées (Météo à venir)",
   printHead:"METEO VOYAGE",printDate:(d,h)=>`établie le ${d} à ${h} · fef73.github.io/meteo-travel`,maPos:"Ma position",
   lClim:"Climat habituel (moyenne 10 ans)",climatDeb:n=>`climat habituel (${n} ans) →`,habituel:"habituel",moyJour:"(moyenne par jour)",
-  pPluieT:v=>`Pluie ou neige (au moins 1 mm) : ${v??"–"} % des jours ces dernières années`,pGelT:v=>`Gel la nuit : ${v} % des nuits ces dernières années`,
+  jPluie:(j,c)=>`${j??"–"}${c?" j":" j/mois"}`,pPluieT:v=>`Pluie ou neige (au moins 1 mm) : environ ${v==null?"–":Math.round(v*30/100)} jours par mois (${v??"–"} % des jours ces dernières années)`,pGelT:v=>`Gel la nuit : ${v} % des nuits ces dernières années`,
   AQ:["Bon","Moyen","Dégradé","Mauvais","Très mauvais","Extrêmement mauvais"]},
 en:{titre:"Travel weather",retour:"⇄ Return trip",retourA:"Return trip:",peuRetour:"You need at least two stops with their dates to prepare the return trip.",effacer:"🗑 Clear",effConf:"Confirm clearing?",sauver:"💾 Save",ouvrir:"📂 Open",recalA:"Trip opened:",recalB:"departure on",recalOk:"Shift the dates",
   vide:"Pick at least one city before saving.",illisible:"File not recognised: pick a trip saved by Travel weather or Météo trajet (.json).",sous:"Day-by-day weather along your trip, anywhere in the world: on arrival at each stop, while you stay, then up to 16 days. Trip further ahead: the usual weather for those dates, from the last 10 years.",
   ajout:"＋ Add a stop",go:"Show",pdf:"📄 PDF / Print",lMax:"High",lMin:"Low",lHeure:"At arrival time",lAir:"Air quality",
   fonct:"ℹ️ How the site works",pluie:"Rain",neige:"Snow",
-  src:"Beyond 7 days: trend only (grey background). Beyond 16 days: usual climate (hatched background, hollow dots), average of the last 10 years within ± 3 days, Open-Meteo archive (ERA5); ☔ share of days with at least 1 mm, ❄ share of frosty nights. Dates and times: local time at each stop. Air quality: European index, CAMS forecast (about 5 days; dotted frame beyond). Sources: Open-Meteo, Copernicus CAMS, GeoNames.",
+  src:"Beyond 7 days: trend only (grey background). Beyond 16 days: usual climate (hatched background, hollow dots), average of the last 10 years within ± 3 days, Open-Meteo archive (ERA5); ☔ usual number of days with rain or snow (at least 1 mm) per month, ❄ share of frosty nights. Dates and times: local time at each stop. Air quality: European index, CAMS forecast (about 5 days; dotted frame beyond). Sources: Open-Meteo, Copernicus CAMS, GeoNames.",
   ville:"City (type at least 2 letters)…",heure:"Arrival time (optional), local time at the stop",altT:"Altitude of the point — leave empty for automatic altitude",
   suppr:"Remove this stop",aucune:"No city found",reseau:"City search unavailable (network).",
   eVille:i=>`Stop ${i}: pick a city from the list.`,eDate:i=>`Stop ${i}: enter the arrival date.`,
@@ -302,7 +302,7 @@ en:{titre:"Travel weather",retour:"⇄ Return trip",retourA:"Return trip:",peuRe
   altAuto:"automatic",altSaisie:"entered",altitude:"Altitude",detail:"detailed forecast (Météo à venir, in French)",
   printHead:"TRAVEL WEATHER",printDate:(d,h)=>`made on ${d} at ${h} · fef73.github.io/meteo-travel`,maPos:"My location",
   lClim:"Usual climate (10-year average)",climatDeb:n=>`usual climate (${n} years) →`,habituel:"usual",moyJour:"(daily average)",
-  pPluieT:v=>`Rain or snow (at least 1 mm): ${v??"–"} % of days in recent years`,pGelT:v=>`Night frost: ${v} % of nights in recent years`,
+  jPluie:(j,c)=>`${j??"–"}${c?" d":" d/mo"}`,pPluieT:v=>`Rain or snow (at least 1 mm): about ${v==null?"–":Math.round(v*30/100)} days per month (${v??"–"} % of days in recent years)`,pGelT:v=>`Night frost: ${v} % of nights in recent years`,
   AQ:["Good","Fair","Moderate","Poor","Very poor","Extremely poor"]}
 };
 const WMO={0:["☀️","Ciel clair","Clear sky"],1:["🌤️","Peu nuageux","Mainly clear"],2:["⛅","Partiellement nuageux","Partly cloudy"],3:["☁️","Couvert","Overcast"],
@@ -612,7 +612,7 @@ function dessiner(E){
     const pw=Math.min(step-6,46);
     if(e.clim){
       // à la place de l'icône : fréquence des jours de pluie ; à la place de l'air : fréquence du gel
-      s+=`<text x="${x(i)}" y="${T-32}" font-size="${n>12?10:12}" text-anchor="middle" fill="var(--pluie)" font-family="IBM Plex Mono,monospace">☔${e.pPluie??"–"}%<title>${t("pPluieT")(e.pPluie)}</title></text>`;
+      s+=`<text x="${x(i)}" y="${T-32}" font-size="${n>12?10:12}" text-anchor="middle" fill="var(--pluie)" font-family="IBM Plex Mono,monospace">☔${t("jPluie")(e.pPluie==null?null:Math.round(e.pPluie*30/100),n>12)}<title>${t("pPluieT")(e.pPluie)}</title></text>`;
       if(e.pGel>=5) s+=`<g><rect x="${x(i)-pw/2}" y="${T-20}" width="${pw}" height="14" rx="7" fill="var(--neige)"/>
         <text x="${x(i)}" y="${T-9.5}" font-size="10" text-anchor="middle" fill="#0b1426" font-family="IBM Plex Mono,monospace">❄${e.pGel}%</text>
         <title>${t("pGelT")(e.pGel)}</title></g>`;
