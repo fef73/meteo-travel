@@ -12,6 +12,8 @@ Le temps prévu jour par jour le long d'un voyage, partout dans le monde. Versio
 
 Graphique : une colonne par jour (arrivée, jours sur place, puis suite jusqu'à J+15), maxi et mini, pluie et neige, icône du temps, ◆ température à l'heure d'arrivée, pastille de qualité de l'air (indice européen). Dates et heures : heure locale de chaque étape.
 
+Voyage lointain (dates jusqu'à un an, 62 jours au plus entre la première et la dernière étape) : au-delà de J+15, **climat habituel** (fond hachuré, points creux) = moyenne des 10 dernières années à ± 3 jours (archives Open-Meteo, ERA5), avec ☔ part des jours de pluie ou neige (≥ 1 mm) et ❄ part des nuits avec gel.
+
 ## EN
 
 Day-by-day weather along a trip, anywhere in the world.
@@ -21,6 +23,8 @@ Day-by-day weather along a trip, anywhere in the world.
 3. Optional: **PDF / Print** (A4 landscape), or share the page address.
 
 Chart: one column per day (arrival, days spent there, then up to day 15), highs and lows, rain and snow, weather icon, ◆ temperature at arrival time, air quality badge (European index). Dates and times: local time at each stop.
+
+Trip further ahead (dates up to one year, 62 days at most between the first and last stops): beyond day 15, **usual climate** (hatched background, hollow dots) = average of the last 10 years within ± 3 days (Open-Meteo archive, ERA5), with ☔ share of days with rain or snow (≥ 1 mm) and ❄ share of frosty nights.
 
 ## Enregistrer un voyage · Save a trip
 
@@ -38,7 +42,7 @@ EN: open the page in Chrome (Android) or Safari (iPhone), then menu ⋮ → "Add
 
 ## Données · Data
 
-Open-Meteo (prévisions · forecast, géocodage · geocoding GeoNames), Copernicus CAMS (qualité de l'air · air quality). Aucune donnée conservée · no data stored: tout est calculé dans le navigateur · everything runs in the browser.
+Open-Meteo (prévisions · forecast, archives ERA5 · ERA5 archive, géocodage · geocoding GeoNames), Copernicus CAMS (qualité de l'air · air quality). Aucune donnée conservée · no data stored: tout est calculé dans le navigateur · everything runs in the browser.
 
 ## Fichiers · Files
 
