@@ -237,7 +237,7 @@ document.getElementById("lock").addEventListener("submit",e=>{
           <li><b>FR / EN</b> : langue du site · <b>°C / °F</b> : températures · <b>mm / in</b> : pluie, neige et altitude (mm, cm, m ou pouces, pieds).</li>
           <li>Étape en France : clic sur son nom pour ses prévisions détaillées dans Météo à venir.</li>
           <li><b>📄 PDF / Imprimer</b> : page A4 paysage avec le voyage et la date d'édition.</li>
-          <li><b>Bulletin</b> sous le graphique : le temps de chaque étape rédigé en clair, un résumé et ce qu'il faut emporter ; <b>📋 Copier</b> pour le coller dans un message. Il figure aussi dans le PDF.</li>
+          <li><b>Bulletin</b> sous le graphique : le temps de chaque étape rédigé en clair, avec la qualité de l'air quand elle est prévue (environ 5 jours), un résumé et ce qu'il faut emporter ; <b>📋 Copier</b> pour le coller dans un message. Il figure aussi dans le PDF.</li>
           <li>L'adresse de la page garde tout le voyage, la langue et les unités : il suffit de la partager ou de la mettre en favori.</li>
           <li><b>💾 Enregistrer / 📂 Ouvrir</b> : le voyage est gardé dans un fichier .json, avec les écarts en jours entre étapes ; à l'ouverture, choisissez la date de départ et les dates se recalent. Les trajets de Météo trajet s'ouvrent aussi. <b>🗑 Effacer</b> vide toutes les étapes (deuxième clic pour confirmer).</li>
           <li><b>⇄ Retour</b> : le même voyage en sens inverse, avec les écarts entre étapes inversés ; départ à la date de la dernière étape, à recaler si besoin.</li>
@@ -265,7 +265,7 @@ document.getElementById("lock").addEventListener("submit",e=>{
           <li><b>FR / EN</b>: site language · <b>°C / °F</b>: temperatures · <b>mm / in</b>: rain, snow and altitude (mm, cm, m or inches, feet).</li>
           <li>Stop in France: click its name for the detailed forecast in Météo à venir (in French).</li>
           <li><b>📄 PDF / Print</b>: A4 landscape page with the trip and the date.</li>
-          <li><b>Report</b> below the chart: each stop's weather in plain words, a summary and what to pack; <b>📋 Copy</b> to paste it into a message. It is also in the PDF.</li>
+          <li><b>Report</b> below the chart: each stop's weather in plain words, with air quality when forecast (about 5 days), a summary and what to pack; <b>📋 Copy</b> to paste it into a message. It is also in the PDF.</li>
           <li>The page address keeps the whole trip, language and units: just share it or bookmark it.</li>
           <li><b>💾 Save / 📂 Open</b>: the trip is kept in a .json file, with the gaps in days between stops; when opening it, pick the departure date and the dates shift. Météo trajet files open too. <b>🗑 Clear</b> empties all stops (click twice to confirm).</li>
           <li><b>⇄ Return trip</b>: the same trip reversed, with the gaps between stops reversed; departure on the last stop's date, to shift if needed.</li>
@@ -313,6 +313,9 @@ fr:{titre:"Météo voyage",retour:"⇄ Retour",retourA:"Retour :",peuRetour:"Il 
   bRare:j=>`Pluie rare, environ ${j} jour${j>1?"s":""} par mois.`,bPeu:j=>`Quelques averses possibles, environ ${j} jours par mois.`,
   bFreq:j=>`Pluie fréquente, environ ${j} jours par mois.`,bNeigeC:"La neige fait partie du temps habituel à ces dates.",
   bTend:"Au-delà de 7 jours : tendance à reconfirmer.",
+  bAirJ:d=>` (prévue jusqu'au ${d})`,bAirBon:p=>`Qualité de l'air bonne${p}.`,bAirDeg:(v,p)=>`Qualité de l'air dégradée par moments (indice jusqu'à ${v})${p}.`,
+  bAirMauv:(c,d,v,p)=>`Qualité de l'air ${["bonne","moyenne","dégradée","mauvaise","très mauvaise","extrêmement mauvaise"][c]} le ${d} (indice ${v}) : limitez les efforts en plein air${p}.`,
+  bAirPire:n=>`Air le moins bon : ${n}.`,
   bResume:"En résumé",bChaud:n=>`Étape la plus chaude : ${n}.`,bFroid:(n,v)=>`Nuits les plus fraîches : ${n} (${v}).`,bHumide:n=>`Étape la plus arrosée : ${n}.`,
   bSac:"À prévoir",sac:{leger:"vêtements légers",laine:"une petite laine pour le soir",chaud:"des vêtements chauds",pluie:"un imperméable",gel:"de quoi protéger l'eau du camping-car du gel"},
   bReconf:d=>`Climat habituel, à reconfirmer : les vraies prévisions seront disponibles à partir du ${d}.`,
@@ -347,6 +350,9 @@ en:{titre:"Travel weather",retour:"⇄ Return trip",retourA:"Return trip:",peuRe
   bRare:j=>`Rain is rare, about ${j} day${j>1?"s":""} a month.`,bPeu:j=>`A few showers possible, about ${j} days a month.`,
   bFreq:j=>`Rain is frequent, about ${j} days a month.`,bNeigeC:"Snow is part of the usual weather at these dates.",
   bTend:"Beyond 7 days: trend to be confirmed.",
+  bAirJ:d=>` (forecast until ${d})`,bAirBon:p=>`Good air quality${p}.`,bAirDeg:(v,p)=>`Air quality moderate at times (index up to ${v})${p}.`,
+  bAirMauv:(c,d,v,p)=>`${["Good","Fair","Moderate","Poor","Very poor","Extremely poor"][c]} air quality on ${d} (index ${v}): limit outdoor exertion${p}.`,
+  bAirPire:n=>`Poorest air: ${n}.`,
   bResume:"In short",bChaud:n=>`Warmest stop: ${n}.`,bFroid:(n,v)=>`Coolest nights: ${n} (${v}).`,bHumide:n=>`Wettest stop: ${n}.`,
   bSac:"Pack",sac:{leger:"light clothes",laine:"a sweater for the evenings",chaud:"warm clothes",pluie:"a rain jacket",gel:"something to protect the camper's water from frost"},
   bReconf:d=>`Usual climate, to be confirmed: the real forecast will be available from ${d}.`,
@@ -752,9 +758,17 @@ function bulletin(E){
       if(C.some(e=>e.neige>=0.5)){neigeV=true;ph.push(t("bNeigeC"))}
     }
     if(tx!=null&&tn!=null&&tx-tn>=13&&!gel)ph.push(t("bEcart"));
+    // qualité de l'air (prévision CAMS, ~5 jours) : pire jour de l'étape
+    const A=J.filter(e=>e.aq!=null);
+    let aqMax=null;
+    if(A.length){
+      const pire=A.reduce((a,b)=>b.aq>a.aq?b:a), c=aqCls(pire.aq), v=Math.round(pire.aq); aqMax=pire.aq;
+      const part=A.length<J.length?t("bAirJ")(dCourt(A.at(-1).date)):"";
+      ph.push(c<=1?t("bAirBon")(part):c===2?t("bAirDeg")(v,part):t("bAirMauv")(c,dCourt(pire.date),v,part));
+    }
     if(P.some(e=>e.date>=TEND))ph.push(t("bTend"));
     const d0=J[0].date, d1=J.at(-1).date;
-    et.push({nom:J[0].nom,per:d0===d1?dCourt(d0):`${dCourt(d0)} – ${dCourt(d1)}`,ph,tx,tn,gel,pluie,neigeV});
+    et.push({nom:J[0].nom,per:d0===d1?dCourt(d0):`${dCourt(d0)} – ${dCourt(d1)}`,ph,tx,tn,gel,pluie,neigeV,aqMax});
   }
   const C=E.some(e=>e.clim), Pr=E.some(e=>!e.clim);
   $("bTitre").textContent=`${t("bTitre")} · ${[...new Set(et.map(e=>e.nom))].join(" → ")}`;
@@ -770,6 +784,8 @@ function bulletin(E){
     if(x1-x0>=2)res.push(t("bChaud")(ch.nom));
     if(n1-n0>=2)res.push(t("bFroid")(fr.nom,deg(fr.tn)));
     if(hu.pluie>=.15&&p1-p0>=.08)res.push(t("bHumide")(hu.nom));
+    const po=et.filter(e=>e.aqMax!=null).reduce((a,b)=>!a||b.aqMax>a.aqMax?b:a,null);
+    if(po&&aqCls(po.aqMax)>=2)res.push(t("bAirPire")(po.nom));
   }
   const S=t("sac"), sac=[];
   if(et.some(e=>e.tx>=24))sac.push(S.leger);
